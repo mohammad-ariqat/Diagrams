@@ -1,0 +1,425 @@
+@startuml
+skinparam monochrome true
+
+' Classes (Tables) with Attributes and Detailed Operations
+class User {
+  +id: BIGINT [PK]
+  +first_name: VARCHAR(255) [not null]
+  +last_name: VARCHAR(255) [not null]
+  +password: VARCHAR(255) [not null]
+  +email: VARCHAR(255) [unique, not null]
+  +phone_number: VARCHAR(50) [unique]
+  +language: VARCHAR(50) [not null]
+  +ip_country_id: BIGINT [FK, not null]
+  +time_zone: VARCHAR(50) [not null]
+  +is_banned: BOOLEAN = false
+  +bio: TEXT
+  +address_id: BIGINT [FK]
+  +deleted_at: TIMESTAMP
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  --
+  +register(): 
+  +login():
+  +update_profile(): 
+  +edit():
+  +ban_user():
+  +show():
+  +index():
+  +delete_account(): 
+  +change_password(): 
+}
+
+class Country {
+  +id: BIGINT [PK]
+  +name_en: VARCHAR(255) [unique, not null]
+  +name_ar: VARCHAR(255) [unique, not null]
+  +code: VARCHAR(10) [unique, not null]
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Product {
+  +id: BIGINT [PK]
+  +name_en: VARCHAR(255) [unique, not null]
+  +name_ar: VARCHAR(255) [unique, not null]
+  +price: DECIMAL(10,2) [not null]
+  +image: VARCHAR(255) [not null]
+  +description_en: TEXT [not null]
+  +description_ar: TEXT [not null]
+  +status: VARCHAR(50) [not null]
+  +availability: VARCHAR(50) [not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Cart {
+  +cart_id: BIGINT [not null]
+  +customer_id: BIGINT [FK, not null]
+  +product_id: BIGINT [FK, not null]
+  +ordered_at: TIMESTAMP [not null]
+  +quantity: INT [not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  --
+  +add_to_cart(): void
+  +update_quantity(): void
+  +remove_from_cart(): void
+  +place_order(): void
+}
+
+
+class User_Has_Roles {
+  +user_id: BIGINT [FK, not null]
+  +role_id: BIGINT [FK, not null]
+  +model_type: VARCHAR(255) [not null]
+  --
+  +assign_role(): void
+  +remove_role(): void
+  +update_role_assignment(): void
+}
+
+class Category {
+  +id: BIGINT [PK]
+  +name_en: VARCHAR(255) [unique, not null]
+  +name_ar: VARCHAR(255) [unique, not null]
+  +image: VARCHAR(255) [not null]
+  +description_en: TEXT [not null]
+  +description_ar: TEXT [not null]
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+  +addCategoryToProduct():
+}
+
+class Post {
+  +id: BIGINT [PK]
+  +title_en: VARCHAR(255) [not null]
+  +title_ar: VARCHAR(255) [not null]
+  +content_en: TEXT [not null]
+  +content_ar: TEXT [not null]
+  +image: VARCHAR(255) [not null]
+  +expert_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Specialty {
+  +id: BIGINT [PK]
+  +name_en: VARCHAR(255) [unique, not null]
+  +name_ar: VARCHAR(255) [unique, not null]
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+  +addSpecialtyToExpert():
+  +removeSpecialtyFromExpert():
+}
+
+class Payments {
+  +id: BIGINT [PK]
+  +order_id: BIGINT [unique, not null]
+  +customer_id: BIGINT [FK, not null]
+  +amount: DECIMAL(10,2) [not null]
+  +payment_info_id: BIGINT [FK, not null]
+  +status: VARCHAR(50) [not null]
+  +refund_status: VARCHAR(50)
+  +deleted_at: TIMESTAMP
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  --
+  +store():
+  +delete():
+  +show():
+  +index():
+  +process_payment(): void
+  +refund_payment(): void
+  +update_payment_status(): void
+}
+
+class Services {
+  +id: BIGINT [PK]
+  +name_en: VARCHAR(255) [unique, not null]
+  +name_ar: VARCHAR(255) [unique, not null]
+  +image: VARCHAR(255) [not null]
+  +description_en: TEXT [not null]
+  +description_ar: TEXT [not null]
+  +status: VARCHAR(50) [not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+  +statusToggel():
+}
+
+
+class Address {
+  +id: BIGINT [PK]
+  +title: VARCHAR(255) [not null]
+  +country_id: BIGINT [FK, not null]
+  +city: VARCHAR(255) [not null]
+  +address_line: TEXT [not null]
+  +user_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Payment_Info {
+  +id: BIGINT [PK]
+  +type: VARCHAR(50) [not null]
+  +data: TEXT [not null]
+  +user_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Discount {
+  +id: BIGINT [PK]
+  +amount: DECIMAL(10,2) [not null]
+  +title: VARCHAR(255) [not null]
+  +code: VARCHAR(50) [unique, not null]
+  +is_active: BOOLEAN [not null]
+  +expire_date: DATE [not null]
+  +quantity: INT [not null]
+  +country_id: BIGINT [FK]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Product_Shops {
+  +id: BIGINT [PK]
+  +product_id: BIGINT [FK, not null]
+  +shop_id: BIGINT [FK, not null]
+  +cost: DECIMAL(10,2) [not null]
+  +employee_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +assign_product_to_shop(): void
+  +update_product_cost(): void
+  +remove_product_from_shop(): void
+}
+
+class Shops {
+  +id: BIGINT [PK]
+  +address_id: BIGINT [FK, not null]
+  +name: VARCHAR(255) [not null]
+  +details: TEXT [not null]
+  +owner_phone_number: VARCHAR(50) [not null]
+  +owner_name: VARCHAR(255) [not null]
+  +is_partner: BOOLEAN [not null]
+  +image: VARCHAR(255) [not null]
+  +employee_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+  +partnerToggle(): void
+}
+
+class Orders {
+  +id: BIGINT [PK]
+  +cart_id: BIGINT [FK, unique, not null]
+  +address_id: BIGINT [FK, not null]
+  +total_price: DECIMAL(10,2) [not null]
+  +user_id: BIGINT [FK, not null]
+  +employee_id: BIGINT [FK, not null]
+  +payment_id: BIGINT [FK, not null]
+  +status: VARCHAR(50) [not null]
+  +delivery_cost: DECIMAL(10,2) [not null]
+  +product_total_price: DECIMAL(10,2) [not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+class Service_Requests {
+  +id: BIGINT [PK]
+  +service_id: BIGINT [FK, not null]
+  +address_id: BIGINT [FK, not null]
+  +details: TEXT [not null]
+  +image: VARCHAR(255) [not null]
+  +customer_id: BIGINT [FK, not null]
+  +employee_id: BIGINT [FK, not null]
+  +expert_id: BIGINT [FK, not null]
+  +status: VARCHAR(50) [not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+  +assign_expert(): void
+}
+
+class Category_Products {
+  +category_id: BIGINT [FK, not null]
+  +product_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +assign_product_to_category(): void
+  +remove_product_from_category(): void
+}
+
+class Discount_Products {
+  +discount_id: BIGINT [FK, not null]
+  +product_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +apply_discount_to_product(): void
+  +remove_discount_from_product(): void
+}
+
+class Expert_Specialty {
+  +expert_id: BIGINT [FK, not null]
+  +specialty_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +assign_specialty_to_expert(): void
+  +remove_specialty_from_expert(): void
+}
+
+class Review {
+  +id: BIGINT [PK]
+  +rating: INT [not null]
+  +product_id: BIGINT [FK, not null]
+  +user_id: BIGINT [FK, not null]
+  +created_at: TIMESTAMP [not null]
+  +updated_at: TIMESTAMP [not null]
+  +deleted_at: TIMESTAMP
+  --
+  +store():
+  +update():
+  +delete():
+  +show():
+  +index():
+}
+
+' Relationships
+User "1" --> "1..*" Country : ip_country_id
+User "1" --> "0..1" Address : address_id
+User "1" --> "1..*" Post : expert_id
+User "1" --> "1..*" Address : user_id
+User "1" --> "1..*" Payment_Info : user_id
+User "1" --> "1..*" Product_Shops : employee_id
+User "1" --> "1..*" Shops : employee_id
+User "1" --> "1..*" Orders : user_id
+User "1" --> "1..*" Orders : employee_id
+User "1" --> "1..*" Service_Requests : employee_id
+User "1" --> "1..*" Service_Requests : expert_id
+User "1" --> "1..*" Review : user_id
+User "1" --> "1..*" User_Has_Roles : user_id
+
+Country "1" --> "1..*" Address : country_id
+Country "1" --> "0..*" Discount : country_id
+
+Product "1" --> "1..*" Cart : product_id
+Product "1" --> "1..*" Product_Shops : product_id
+Product "1" --> "1..*" Review : product_id
+Product "1" --> "1..*" Category_Products : product_id
+Product "1" --> "1..*" Discount_Products : product_id
+
+Customer "1" --> "1..*" Cart : customer_id
+Customer "1" --> "1..*" Payments : customer_id
+Customer "1" --> "1..*" Service_Requests : customer_id
+Customer "1" --> "1" Payment_Info : payment_info_id
+
+Roles "1" --> "1..*" User_Has_Roles : role_id
+
+Category "1" --> "1..*" Category_Products : category_id
+
+Specialty "1" --> "1..*" Expert_Specialty : specialty_id
+
+Payments "1" --> "1" Orders : payment_id
+Payments "1" --> "1" Payment_Info : payment_info_id
+
+Services "1" --> "1..*" Service_Requests : service_id
+
+Address "1" --> "1..*" Shops : address_id
+Address "1" --> "1..*" Orders : address_id
+Address "1" --> "1..*" Service_Requests : address_id
+
+Discount "1" --> "1..*" Discount_Products : discount_id
+
+Shops "1" --> "1..*" Product_Shops : shop_id
+
+Expert_Specialty "1..*" --> "1" User : expert_id
+Expert_Specialty "1..*" --> "1" Specialty : specialty_id
+
+Category_Products "1..*" --> "1" Category : category_id
+Category_Products "1..*" --> "1" Product : product_id
+
+Discount_Products "1..*" --> "1" Discount : discount_id
+Discount_Products "1..*" --> "1" Product : product_id
+
+@enduml
